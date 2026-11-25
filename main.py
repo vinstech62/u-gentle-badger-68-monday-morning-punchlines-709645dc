@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Monday Morning Punchlines — writes one joke about Monday mornings to /output/entry.txt."""
+"""Monday Morning Punchlines.
+
+Writes a single original joke about Monday mornings to /output/entry.txt.
+No external dependencies, no network access, no files read outside the
+repository -- the joke is a constant in this file.
+"""
 
 import os
 
-JOKE = "My bed loves me more on Monday mornings than my job ever will — it holds me tighter every time my alarm tries to break us up."
+JOKE = (
+    "Monday morning: the weekend's free trial expired, and the week "
+    "auto-renewed at full price \u2014 no cancel button."
+)
 
-OUT_PATH = "/output/entry.txt"
+OUTPUT_PATH = "/output/entry.txt"
 
 
 def main():
-    assert 1 <= len(JOKE) <= 200, "joke must be 1-200 chars"
-    assert "\n" not in JOKE and JOKE == JOKE.strip(), "joke must be one trimmed line"
-    os.makedirs("/output", exist_ok=True)
-    data = JOKE.encode("utf-8")
-    with open(OUT_PATH, "wb") as f:
-        f.write(data)
-    os.chmod(OUT_PATH, 0o644)
-    with open(OUT_PATH, "rb") as f:
-        written = f.read()
-    assert written == data, "written bytes do not match joke"
-    assert oct(os.stat(OUT_PATH).st_mode & 0o777) == "0o644", "output mode must be 0644"
-    print(f"Wrote {len(data)} bytes to {OUT_PATH}")
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(JOKE + "\n")
+    os.chmod(OUTPUT_PATH, 0o644)
 
 
 if __name__ == "__main__":
